@@ -11,6 +11,7 @@ import { LanguagePlanets } from '@/features/languages/components/LanguagePlanets
 import { StreakCounter } from '@/features/streak/components/StreakCounter';
 import { RepoGrimoire } from '@/features/repositories/components/RepoGrimoire';
 import { ActivityWaves } from '@/features/activity/components/ActivityWaves';
+import { TimeOracle } from '@/features/activity/components/TimeOracle/TimeOracle';
 
 import styles from './App.module.css';
 import '@/shared/styles/global.css';
@@ -80,13 +81,19 @@ function App() {
             <LanguagePlanets
               className={styles.languages}
             />
-            <RepoGrimoire
-              repos={data.topRepos}
-              className={styles.repositories}
+            <TimeOracle
+              contributions={data.contributions}
+              className={styles.oracle}
             />
+
+            {/* Row 3 */}
             <ActivityWaves
               contributions={data.contributions}
               className={styles.activity}
+            />
+            <RepoGrimoire
+              repos={data.topRepos}
+              className={styles.repositories}
             />
           </main>
         </>

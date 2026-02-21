@@ -14,7 +14,8 @@
 .dashboardGrid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    gap: var(--spacing-xl);
+    gap: var(--spacing-md);
+    /* Reduzido de XL para MD (Avança união dos cards) */
     /* Apenas duas linhas longas! */
     grid-template-rows: auto auto;
 }
@@ -41,14 +42,20 @@
     grid-column: span 6;
 }
 
-.repositories {
-    /* Embaixo do Streak (que possui span 3) */
+.oracle {
+    /* Novo Card de Status no lugar do antigo Grimório */
     grid-column: span 3;
 }
 
 /* --- Row 3 (Por Baixo de Tudo) --- */
 .activity {
-    grid-column: span 12;
+    grid-column: span 6;
+    /* Metade com Grimório */
+}
+
+.repositories {
+    grid-column: span 6;
+    /* Metade com Ondas no vácuo */
 }
 
 /* Responsividade Progressiva */
@@ -76,12 +83,20 @@
         grid-column: span 8;
     }
 
+    .oracle {
+        grid-column: span 4;
+    }
+
+    .languages {
+        grid-column: span 8;
+    }
+
     .repositories {
-        grid-column: span 6;
+        grid-column: span 12;
     }
 
     .activity {
-        grid-column: span 6;
+        grid-column: span 12;
     }
 }
 
@@ -90,6 +105,7 @@
     .profile,
     .contributions,
     .streak,
+    .oracle,
     .languages,
     .repositories,
     .activity {

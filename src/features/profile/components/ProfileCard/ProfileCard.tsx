@@ -50,7 +50,7 @@ export function ProfileCard({ profile, className = '', actionButton }: ProfileCa
             </div>
 
             {actionButton && (
-                <div style={{ marginTop: 'auto', width: '100%', display: 'flex', justifyContent: 'center', paddingTop: '1rem' }}>
+                <div style={{ marginTop: 'var(--spacing-sm)', width: '100%', display: 'flex', justifyContent: 'center', paddingTop: '4px' }}>
                     {actionButton}
                 </div>
             )}

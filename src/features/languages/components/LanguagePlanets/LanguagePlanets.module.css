@@ -3,8 +3,8 @@
     flex-direction: column;
     align-items: center;
     overflow: hidden;
-    /* Importante para órbita não sair da tela/card */
-    min-height: 480px;
+    /* Reduzido brutalmente para não forçar as filas do Grid e esticar perfil/oraculo */
+    min-height: 280px;
     padding: var(--spacing-sm) var(--spacing-md);
 }
 
@@ -39,7 +39,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 110px;
+    margin-top: 30%;
+    /* Empurra pro centro do Card ao Inves de Margins Absolutos */
 }
 
 /* O sol (Centro gravitacional - Avatar/Buraco Negro) */
