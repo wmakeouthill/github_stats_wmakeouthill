@@ -1,7 +1,7 @@
 name: Record Dashboard Animation
 on:
   schedule:
-    - cron: '0 0 * * *' # Roda uma vez por dia as 00:00
+    - cron: "0 0 * * *" # Roda uma vez por dia as 00:00
   workflow_dispatch: # Permite rodar manualmente clicando num botao no Github
 
 jobs:
@@ -9,26 +9,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Instalar NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 'lts/*'
-          
+          node-version: "lts/*"
+
       - name: Instalar dependencias do Headless Browser (Puppeteer)
         run: |
           npm init -y
           npm install puppeteer puppeteer-screen-recorder
-          
+
       - name: Criar Script de Gravacao Automatica do Dashboard
         run: |
-          cat << 'EOF' > record_dashboard.js
+          cat << 'EOF' > record_dashboard.cjs
           const puppeteer = require('puppeteer');
           const { PuppeteerScreenRecorder } = require('puppeteer-screen-recorder');
 
           (async () => {
             const browser = await puppeteer.launch({
-              headless: "new",
               args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1200,900']
             });
             const page = await browser.newPage();
@@ -72,7 +71,7 @@ jobs:
           EOF
 
       - name: Gravar Dashboard (Puppeteer)
-        run: node record_dashboard.js
+        run: node record_dashboard.cjs
 
       - name: Instalar FFmpeg e Converter para WebP Optimizado
         run: |
@@ -81,12 +80,12 @@ jobs:
           echo "Convertendo video ultra qualitativo MP4 para WebP super compactado animado..."
           # Filtros: Resize pra um Readme aceitavel e loop infinito em otima qualidade de frames
           ffmpeg -i dashboard_animated.mp4 -vcodec libwebp -filter:v fps=fps=15 -lossless 0 -compression_level 6 -q:v 50 -loop 0 -preset default -an -vsync 0 dashboard_animated.webp
-      
+
       - name: Mover a gravacao webp final para os assets publicos e limpar lixo do NodeJS actions
         run: |
           mkdir -p public/assets # Cria pasta caso nao exista para organizar o seu root directory
           mv dashboard_animated.webp public/assets/
-          rm -rf node_modules package.json package-lock.json record_dashboard.js dashboard_animated.mp4
+          rm -rf node_modules package.json package-lock.json record_dashboard.cjs dashboard_animated.mp4
 
       - name: Commitar Gravacao Webp Animada no Repositorio 🚀
         uses: stefanzweifel/git-auto-commit-action@v4
