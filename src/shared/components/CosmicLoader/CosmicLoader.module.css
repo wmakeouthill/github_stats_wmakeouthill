@@ -1,0 +1,51 @@
+.loaderContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    gap: var(--spacing-xl);
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: relative;
+    animation: nebula-spin 3s linear infinite;
+    box-shadow: 0 0 20px var(--nebula-purple);
+}
+
+.spinner::before,
+.spinner::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid transparent;
+}
+
+.spinner::before {
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-top-color: var(--faded-gold);
+    border-bottom-color: var(--faded-gold);
+    animation: nebula-spin 2s linear infinite reverse;
+}
+
+.spinner::after {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-left-color: var(--phantom-white);
+    border-right-color: var(--phantom-white);
+    animation: nebula-spin 4s linear infinite;
+}
+
+.text {
+    animation: breathe 2s ease-in-out infinite;
+    color: var(--starlight);
+    letter-spacing: 2px;
+}

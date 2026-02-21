@@ -1,0 +1,143 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    /* Importante para órbita não sair da tela/card */
+    min-height: 480px;
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.headerBox {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.title span {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 0.8rem;
+    color: var(--ash-gray);
+    margin-top: 2px;
+}
+
+.solarSystem {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 110px;
+}
+
+/* O sol (Centro gravitacional - Avatar/Buraco Negro) */
+.blackHole {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--void-black);
+    box-shadow: 0 0 15px var(--faded-gold), inset 0 0 10px var(--midnight-blue);
+    z-index: 10;
+    animation: pulse-blood 4s infinite alternate;
+}
+
+/* Efeito rotativo CSS orbit */
+.planetWrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Animação que rotaciona o planeta e também contra-rotaciona o conteúdo */
+    /* Definido via style no React para ser dinâmico */
+}
+
+/* Traça a linha da órbita para dar referência visual */
+.orbitRing {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px dashed rgba(255, 255, 255, 0.05);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.planet {
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 0 0 10px currentColor;
+    /* Falso 3d */
+    cursor: pointer;
+    transition: transform 0.2s;
+    /* Contra-rotação do planeta feita via react inline style ou outra camada se necessário, a versão simples deixaremos sem letreiro girar */
+}
+
+.planet:hover {
+    transform: scale(1.2);
+    z-index: 20;
+}
+
+.planetLabelBox {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+}
+
+.planetLabelLine {
+    width: 1px;
+    height: 25px;
+    /* Comprimento da linha conectora */
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-100%);
+    opacity: 0.6;
+}
+
+.planetLabelText {
+    position: absolute;
+    top: -40px;
+    /* Acima da linha */
+    color: var(--phantom-white);
+    font-size: 0.70rem;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    text-shadow: 0 0 4px var(--abyss);
+    font-weight: 500;
+    background-color: rgba(30, 27, 75, 0.5);
+    /* fundo sutil para leitura */
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.percent {
+    font-weight: bold;
+    margin-left: 4px;
+}
+
+.emptyState {
+    color: var(--ash-gray);
+    margin-top: 50px;
+}

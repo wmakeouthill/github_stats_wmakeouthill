@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap');
+@import './variables.css';
+@import './animations.css';
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--void-black);
+    color: var(--phantom-white);
+    min-height: 100vh;
+    /* overflow-x: hidden; */
+    /* Desligado p/ evitar problemas no layout se houver bordas, controlamos nos widhts base */
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tipografia Base */
+h1,
+h2,
+h3,
+h4,
+.font-cinzel {
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    color: var(--faded-gold);
+}
+
+.font-garamond {
+    font-family: 'EB Garamond', serif;
+}
+
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Reset Links */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}

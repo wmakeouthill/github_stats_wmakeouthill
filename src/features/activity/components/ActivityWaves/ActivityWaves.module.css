@@ -1,0 +1,78 @@
+.container {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+    z-index: 2;
+}
+
+.title span {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.waveContainer {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    /* SVG vai caber aqui dentro sem esticar para fora. Se esticar, vamos garantir que role horizontal se necessário, mas como ele é escalado viewBox a intenção é exibir tudo achatado no banner */
+    overflow: hidden;
+}
+
+.waveSvg {
+    width: 100%;
+    /* Escala todo o caminho para caber na div (compressão da wave visual) */
+    height: 100%;
+    /* Remove preserveAspectRatio p/ esticar na horizontal */
+}
+
+/* O gradiente que preenche a onda por baixo */
+.waveFill {
+    fill: url(#waveGradient);
+    opacity: 0.3;
+}
+
+/* A linha viva com pontilhado dinâmico/Glow */
+.waveLine {
+    fill: none;
+    stroke: var(--deep-purple);
+    stroke-width: 3;
+    filter: drop-shadow(0 0 5px var(--nebula-purple));
+
+    /* Animação que "desenha" a linha */
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: drawLine 4s forwards ease-in-out;
+}
+
+@keyframes drawLine {
+    from {
+        stroke-dashoffset: 2000;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dayLabel {
+    font-size: 0.75rem;
+    color: var(--ash-gray);
+    white-space: nowrap;
+}

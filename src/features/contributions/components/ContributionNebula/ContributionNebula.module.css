@@ -1,0 +1,142 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    /* Remover flex: 1 intrínseco se estiver crescendo muito */
+    height: fit-content;
+    padding: var(--spacing-sm) var(--spacing-md);
+    /* Override padding GothicCard */
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: 0;
+}
+
+.title span {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+.skyGrid {
+    /* Grid do Github style: 53 semanas x 7 dias */
+    /* Com scroll horizontal na mobile */
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(12px, 1fr);
+    gap: 4px;
+    overflow-x: auto;
+    padding: 8px var(--spacing-sm);
+    background: radial-gradient(circle at center, rgba(107, 33, 168, 0.05) 0%, transparent 70%);
+    border-radius: var(--border-radius-md);
+    border: 1px solid rgba(107, 33, 168, 0.2);
+    scrollbar-width: thin;
+    scrollbar-color: var(--midnight-blue) transparent;
+}
+
+.skyGrid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.skyGrid::-webkit-scrollbar-thumb {
+    background: var(--midnight-blue);
+    border-radius: 4px;
+}
+
+.starCell {
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.star {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: crosshair;
+}
+
+.star:hover {
+    transform: scale(2) !important;
+    z-index: 10;
+}
+
+/* Níveis das estrelas */
+.level-0 {
+    background-color: transparent;
+    width: 2px;
+    height: 2px;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.05);
+    /* Zero contribuições: vazio espacial bem sutil */
+}
+
+.level-1 {
+    background-color: var(--deep-purple);
+    opacity: 0.3;
+    box-shadow: 0 0 3px var(--deep-purple);
+}
+
+.level-2 {
+    background-color: var(--nebula-purple);
+    opacity: 0.6;
+    width: 5px;
+    height: 5px;
+    box-shadow: 0 0 5px var(--nebula-purple);
+}
+
+.level-3 {
+    background-color: #a78bfa;
+    /* Lighter purple */
+    opacity: 0.8;
+    width: 6px;
+    height: 6px;
+    box-shadow: 0 0 8px #a78bfa, 0 0 15px rgba(167, 139, 250, 0.4);
+}
+
+.level-4 {
+    background-color: var(--faded-gold);
+    /* Estrela dourada/supernova para max contribs */
+    opacity: 1;
+    width: 7px;
+    height: 7px;
+    box-shadow: 0 0 10px var(--faded-gold), 0 0 20px rgba(212, 165, 116, 0.6);
+    animation: pulse-blood 2s infinite alternate;
+    /* Re-uso da animação para pulsar */
+}
+
+.legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    font-size: 0.8rem;
+    color: var(--starlight);
+    margin-top: 2px;
+}
+
+.legendStarBox {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.summary {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--ash-gray);
+    border-top: 1px dashed var(--midnight-blue);
+    padding-top: 6px;
+}
+
+.summary b {
+    color: var(--phantom-white);
+}

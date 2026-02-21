@@ -1,0 +1,98 @@
+.appLayout {
+    position: relative;
+    min-height: 100vh;
+    z-index: 1;
+    padding: var(--spacing-md);
+    max-width: 1600px;
+    /* Aumentado para um layout bem horizontal! */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dashboardGrid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--spacing-xl);
+    /* Apenas duas linhas longas! */
+    grid-template-rows: auto auto;
+}
+
+/* O Mosaico do Dashboard (Aproveitando alturas combinadas) */
+/* --- Row 1 (Linha Superior) --- */
+.profile {
+    grid-column: span 3;
+    grid-row: span 2;
+    /* Profile estica e ocupa 2 linhas na vertical porque é alto! */
+}
+
+.contributions {
+    grid-column: span 6;
+}
+
+.streak {
+    grid-column: span 3;
+}
+
+/* --- Row 2 (Linha Inferior) --- */
+.languages {
+    /* Embaixo do Contribution Nebula (que possui span 6) */
+    grid-column: span 6;
+}
+
+.repositories {
+    /* Embaixo do Streak (que possui span 3) */
+    grid-column: span 3;
+}
+
+/* --- Row 3 (Por Baixo de Tudo) --- */
+.activity {
+    grid-column: span 12;
+}
+
+/* Responsividade Progressiva */
+
+@media (max-width: 1300px) {
+    .dashboardGrid {
+        gap: var(--spacing-md);
+    }
+}
+
+@media (max-width: 1100px) {
+    .profile {
+        grid-column: span 4;
+    }
+
+    .contributions {
+        grid-column: span 8;
+    }
+
+    .streak {
+        grid-column: span 4;
+    }
+
+    .languages {
+        grid-column: span 8;
+    }
+
+    .repositories {
+        grid-column: span 6;
+    }
+
+    .activity {
+        grid-column: span 6;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .profile,
+    .contributions,
+    .streak,
+    .languages,
+    .repositories,
+    .activity {
+        grid-column: span 12;
+    }
+}
