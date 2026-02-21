@@ -1,0 +1,95 @@
+name: Record Dashboard Animation
+on:
+  schedule:
+    - cron: '0 0 * * *' # Roda uma vez por dia as 00:00
+  workflow_dispatch: # Permite rodar manualmente clicando num botao no Github
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Instalar NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+          
+      - name: Instalar dependencias do Headless Browser (Puppeteer)
+        run: |
+          npm init -y
+          npm install puppeteer puppeteer-screen-recorder
+          
+      - name: Criar Script de Gravacao Automatica do Dashboard
+        run: |
+          cat << 'EOF' > record_dashboard.js
+          const puppeteer = require('puppeteer');
+          const { PuppeteerScreenRecorder } = require('puppeteer-screen-recorder');
+
+          (async () => {
+            const browser = await puppeteer.launch({
+              headless: "new",
+              args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1200,900']
+            });
+            const page = await browser.newPage();
+            
+            // Forca tamanho de janela "Desktop Compacto" para a grid ficar bonita e junta
+            await page.setViewport({ width: 1200, height: 900, deviceScaleFactor: 2 });
+            
+            // Acessa o painel de producao no Vercel (garantir cache limpo com query param / timestamp random)
+            const timestamp = new Date().getTime();
+            await page.goto(`https://github-stats-wmakeouthill.vercel.app/?fresh=true&t=${timestamp}`, { 
+              waitUntil: 'networkidle0', // Espera todos os SVGs, APIS e Efeitos de Particula carregarem
+              timeout: 60000 
+            });
+
+            // Deixa a pagina assentar (particulas, planetas, css, orbitas, poeira cosmica rodarem)
+            await new Promise(r => setTimeout(r, 4000));
+
+            const Config = {
+              followNewTab: false,
+              fps: 30, // FPS suave da animacao 3D do Card Orfaos
+              videoFrame: { width: 1200, height: 900 },
+              videoCrf: 28, // Equilibrio entre UltraHD e Tamanho leve pra o Webp/MP4
+              videoCodec: 'libx264',
+              videoPreset: 'ultrafast',
+              videoBitrate: 2000,
+              aspectRatio: '4:3'
+            };
+            
+            const recorder = new PuppeteerScreenRecorder(page, Config);
+            
+            console.log('Gravando dashboard no Vacuo Cosmico (MP4)...');
+            await recorder.start('./dashboard_animated.mp4');
+            
+            // Filma exatos 6.5 segundos magicos
+            await new Promise(r => setTimeout(r, 6500));
+            
+            await recorder.stop();
+            await browser.close();
+            console.log('Gravacao original MP4 finalizada com sucesso!');
+          })();
+          EOF
+
+      - name: Gravar Dashboard (Puppeteer)
+        run: node record_dashboard.js
+
+      - name: Instalar FFmpeg e Converter para WebP Optimizado
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          echo "Convertendo video ultra qualitativo MP4 para WebP super compactado animado..."
+          # Filtros: Resize pra um Readme aceitavel e loop infinito em otima qualidade de frames
+          ffmpeg -i dashboard_animated.mp4 -vcodec libwebp -filter:v fps=fps=15 -lossless 0 -compression_level 6 -q:v 50 -loop 0 -preset default -an -vsync 0 dashboard_animated.webp
+      
+      - name: Mover a gravacao webp final para os assets publicos e limpar lixo do NodeJS actions
+        run: |
+          mkdir -p public/assets # Cria pasta caso nao exista para organizar o seu root directory
+          mv dashboard_animated.webp public/assets/
+          rm -rf node_modules package.json package-lock.json record_dashboard.js dashboard_animated.mp4
+
+      - name: Commitar Gravacao Webp Animada no Repositorio 🚀
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "✨ chore: Auto-Update Dashboard Cosmic Recording (Webp Animation)"
+          file_pattern: "public/assets/dashboard_animated.webp"

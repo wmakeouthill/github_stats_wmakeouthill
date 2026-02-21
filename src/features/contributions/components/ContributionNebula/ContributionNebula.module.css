@@ -2,8 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    /* Remover flex: 1 intrínseco se estiver crescendo muito */
-    height: fit-content;
+    /* Sem height: fit-content para que o card estique e fique com a mesma altura do Streak na row 1 (como Astros Órfãos = Oráculo na row 2) */
     padding: var(--spacing-sm) var(--spacing-md);
     /* Override padding GothicCard */
 }

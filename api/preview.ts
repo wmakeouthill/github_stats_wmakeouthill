@@ -48,23 +48,71 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         : `<circle cx="52" cy="56" r="32" fill="${muted}"/>`;
 
     const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="495" height="180" viewBox="0 0 495 180">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="495" height="195" viewBox="0 0 495 195">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:${bg}"/>
-      <stop offset="100%" style="stop-color:#0d2137"/>
+      <stop offset="0%" style="stop-color:#0f0c29"/>
+      <stop offset="50%" style="stop-color:#302b63"/>
+      <stop offset="100%" style="stop-color:#24243e"/>
     </linearGradient>
     <clipPath id="avatar">
-      <circle cx="52" cy="56" r="32"/>
+      <circle cx="56" cy="56" r="36"/>
     </clipPath>
+    <!-- Filtro de brilho sutil -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
   </defs>
-  <rect width="495" height="180" rx="12" fill="url(#bg)" stroke="${accent}" stroke-width="2"/>
-  ${avatar}
-  <text x="100" y="52" fill="${accent}" font-family="system-ui, sans-serif" font-size="18" font-weight="700">@${profile.login}</text>
-  <text x="100" y="78" fill="${muted}" font-family="system-ui, sans-serif" font-size="12">GitHub Stats</text>
-  <text x="100" y="102" fill="${text}" font-family="system-ui, sans-serif" font-size="13">${profile.followers} seguidores · ${profile.publicRepos} repos · ${profile.totalStars ?? 0} ★</text>
-  <text x="100" y="126" fill="${text}" font-family="system-ui, sans-serif" font-size="13">Streak atual: ${streak.current} dias · Recorde: ${streak.longest} dias</text>
-  <text x="100" y="152" fill="${accent}" font-family="system-ui, sans-serif" font-size="13" font-weight="600">Clique para abrir o painel →</text>
+  
+  <!-- Fundo do Card -->
+  <rect width="495" height="195" rx="12" fill="url(#bg)" stroke="#DBC27D" stroke-width="1.5"/>
+
+  <!-- Título e Borda Sutil Superior -->
+  <rect width="495" height="4" fill="#6B21A8" rx="2" opacity="0.8"/>
+  <text x="247.5" y="24" fill="#DBC27D" font-family="'Courier New', Courier, monospace" font-size="12" font-weight="bold" text-anchor="middle" letter-spacing="2">✦ O GRIMÓRIO DE CÓDIGO ✦</text>
+  <line x1="40" y1="32" x2="455" y2="32" stroke="#4B5563" stroke-dasharray="2,2" stroke-width="1" opacity="0.3"/>
+
+  <!-- Avatar e Informações da Esquerda -->
+  <g transform="translate(10, 30)">
+    ${avatar}
+  </g>
+  <text x="110" y="70" fill="#EAEAEA" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="800">@${profile.login}</text>
+  <text x="110" y="90" fill="#9CA3AF" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-style="italic">Dashboard Cósmico Interativo</text>
+
+  <!-- Caixa de Status Direita (Linhas divisórias) -->
+  <line x1="320" y1="60" x2="320" y2="150" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
+
+  <!-- Métricas Primárias (Meio) -->
+  <g transform="translate(110, 115)">
+    <text x="0" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12">Seguidores</text>
+    <text x="0" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.followers}</text>
+    
+    <text x="80" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12">Repos</text>
+    <text x="80" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.publicRepos}</text>
+    
+    <text x="140" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12">Estrelas</text>
+    <text x="140" y="20" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="16" font-weight="bold" filter="url(#glow)">${profile.totalStars ?? 0} ★</text>
+  </g>
+
+  <!-- Métricas de Streak (Direita) -->
+  <g transform="translate(340, 75)">
+    <circle cx="0" cy="-4" r="4" fill="#10B981" />
+    <text x="12" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Streak Atual</text>
+    <text x="12" y="22" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="22" font-weight="bold">${streak.current}</text>
+    <text x="45" y="22" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12"> dias</text>
+
+    <!-- Fogo ou ícone de Recorde -->
+    <path d="M0,40 C0,40 5,35 5,30 C5,25 0,20 0,20 C0,20 -5,25 -5,30 C-5,35 0,40 0,40 Z" fill="#DBC27D" transform="translate(0, 15) scale(0.6)"/>
+    <text x="12" y="52" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Maior Sequência</text>
+    <text x="12" y="72" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="20" font-weight="bold" filter="url(#glow)">${streak.longest}</text>
+    <text x="40" y="72" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12"> dias</text>
+  </g>
+
+  <!-- Rodapé / Call to Action -->
+  <line x1="40" y1="160" x2="455" y2="160" stroke="#4B5563" stroke-dasharray="2,2" stroke-width="1" opacity="0.3"/>
+  <rect x="150" y="168" width="195" height="20" rx="10" fill="#1E1B4B" opacity="0.6"/>
+  <text x="247.5" y="182" fill="#c084fc" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Clique na imagem para abrir o Painel ✦</text>
 </svg>`;
 
     res.setHeader('Content-Type', 'image/svg+xml');
