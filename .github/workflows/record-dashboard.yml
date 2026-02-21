@@ -4,6 +4,9 @@ on:
     - cron: "0 0 * * *" # Roda uma vez por dia as 00:00
   workflow_dispatch: # Permite rodar manualmente clicando num botao no Github
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
