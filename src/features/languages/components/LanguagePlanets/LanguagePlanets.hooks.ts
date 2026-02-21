@@ -12,15 +12,15 @@ export function useLanguagePlanets() {
         const topLangs = data.languages.slice(0, 8);
 
         return topLangs.map((lang, index) => {
-            // Cálculo do tamanho visual (de 10px a 50px) dependendo da porcentagem
-            const minRadius = 10;
-            const maxRadius = 45;
+            // Cálculo do tamanho visual dependendo da porcentagem
+            const minRadius = 8;
+            const maxRadius = 35;
             // Tamanho proporcional (limite max para evitar que planete gigante ocupe tudo)
             const radiusPixels = Math.max(minRadius, Math.min(maxRadius, (lang.percentage / 100) * 150));
 
             // As órbitas um pouco mais juntas para não vazar da view e esconder o planeta
-            const minOrbit = 35;
-            const orbitGap = 11;
+            const minOrbit = 28;
+            const orbitGap = 10;
             const orbitRadius = minOrbit + (index * orbitGap);
 
             // Duração da órbita controlada

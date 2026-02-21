@@ -1,5 +1,13 @@
 <div align="center">
-  
+
+## 📊 Painel GitHub Stats
+
+[![Abrir painel](https://img.shields.io/badge/📊_Abrir_Painel_GitHub_Stats-002E59?style=for-the-badge&labelColor=DBC27D)](https://github-stats-wmakeouthill.vercel.app/)
+
+**[→ github-stats-wmakeouthill.vercel.app](https://github-stats-wmakeouthill.vercel.app/)**
+
+---
+
 # 👋 Olá! Eu sou Wesley ([@wmakeouthill](https://github.com/wmakeouthill))
 
 [![Typing SVG](https://readme-typing-svg.demolab.com?font=Inter&weight=600&size=22&pause=1000&color=DBC27D&center=true&vCenter=true&random=false&width=650&lines=Full-Stack+Developer;Java+17%2F21+%7C+Spring+Boot+3.x;Angular+17%2B+%7C+TypeScript+%7C+RxJS;Clean+Architecture+%7C+DDD+%7C+SOLID;OWASP+%7C+RBAC+%7C+Microservices;Docker+%7C+CI%2FCD+%7C+Google+Cloud+Run)](https://wmakeouthill.dev)

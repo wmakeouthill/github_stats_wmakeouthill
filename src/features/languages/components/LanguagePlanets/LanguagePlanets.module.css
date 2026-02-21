@@ -3,8 +3,8 @@
     flex-direction: column;
     align-items: center;
     overflow: hidden;
-    /* Reduzido brutalmente para não forçar as filas do Grid e esticar perfil/oraculo */
-    min-height: 280px;
+    /* Ultra-redução para fechar o espaço ocioso do Layout Master */
+    min-height: 240px;
     padding: var(--spacing-sm) var(--spacing-md);
 }
 
@@ -12,7 +12,9 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-bottom: 8px;
+    margin-bottom: 2px;
+    z-index: 50;
+    /* Garante que os planetas passem por baixo do header mas o espaço seja respeitado */
 }
 
 .title {
@@ -34,20 +36,20 @@
 
 .solarSystem {
     position: relative;
-    width: 10px;
-    height: 10px;
+    width: 1px;
+    height: 1px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 30%;
-    /* Empurra pro centro do Card ao Inves de Margins Absolutos */
+    margin: auto 0;
+    /* Centraliza perfeitamente no gap restante livre do painel flex */
 }
 
 /* O sol (Centro gravitacional - Avatar/Buraco Negro) */
 .blackHole {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: var(--void-black);
     box-shadow: 0 0 15px var(--faded-gold), inset 0 0 10px var(--midnight-blue);
