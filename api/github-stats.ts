@@ -179,8 +179,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             languageColor: r.primaryLanguage?.color || '#888'
         });
 
-        // Enviamos até 15 repositórios do GraphQL ao frontend (5 páginas de 3)
-        const top15Repos = repos.slice(0, 15).map(formatRepo);
+        // Enviamos todos os repositórios públicos
+        const allRepos = repos.map(formatRepo);
 
         const formatted = {
             profile: {
@@ -204,7 +204,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 calendar: flatCalendar
             },
             streak,
-            topRepos: top15Repos
+            topRepos: allRepos
         };
 
         const fresh = req.query.fresh === 'true';

@@ -49,6 +49,28 @@
     }
 }
 
+@keyframes orbit-z {
+    0% {
+        z-index: 20;
+    }
+
+    49.9% {
+        z-index: 20;
+    }
+
+    50% {
+        z-index: 5;
+    }
+
+    99.9% {
+        z-index: 5;
+    }
+
+    100% {
+        z-index: 20;
+    }
+}
+
 @keyframes fadeInScale {
     from {
         opacity: 0;

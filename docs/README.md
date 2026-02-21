@@ -2,9 +2,9 @@
 
 ## 📊 Painel GitHub Stats
 
-[![Abrir painel](https://img.shields.io/badge/📊_Abrir_Painel_GitHub_Stats-002E59?style=for-the-badge&labelColor=DBC27D)](https://github-stats-wmakeouthill.vercel.app/)
+[![GitHub Stats Panel](https://github-stats-wmakeouthill.vercel.app/api/preview)](https://github-stats-wmakeouthill.vercel.app/)
 
-**[→ github-stats-wmakeouthill.vercel.app](https://github-stats-wmakeouthill.vercel.app/)**
+*Clique na imagem para abrir o painel interativo*
 
 ---
 

@@ -41,8 +41,8 @@ export function LanguagePlanets({ className = '' }: LanguagePlanetsProps) {
                             className={styles.planetWrapper}
                             style={{
                                 '--orbit-radius': `${p.orbitRadius}px`,
-                                animation: `orbit ${p.orbitDurationSec}s linear infinite`,
-                                animationDelay: `${p.startDelaySec}s`
+                                animation: `orbit ${p.orbitDurationSec}s linear infinite, orbit-z ${p.orbitDurationSec}s linear infinite`,
+                                animationDelay: `${p.startDelaySec}s, ${p.startDelaySec}s`
                             } as React.CSSProperties}
                         >
                             <div
