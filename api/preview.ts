@@ -42,10 +42,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const text = '#e6edf3';
   const muted = '#8b949e';
 
-  const avatarHref = profile.avatarUrl ? profile.avatarUrl.replace(/&/g, '&amp;') : '';
-  const avatar = avatarHref
-    ? `<image href="${avatarHref}" x="20" y="24" width="64" height="64" clip-path="url(#avatar)"/>`
-    : `<circle cx="52" cy="56" r="32" fill="${muted}"/>`;
+  let base64Avatar = '';
+  if (profile.avatarUrl) {
+    try {
+      const imgRes = await fetch(profile.avatarUrl);
+      const arrayBuffer = await imgRes.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const contentType = imgRes.headers.get('content-type') || 'image/jpeg';
+      base64Avatar = `data:${contentType};base64,${buffer.toString('base64')}`;
+    } catch (e) {
+      console.warn('Erro ao baixar avatar em base64', e);
+    }
+  }
+
+  const avatar = base64Avatar
+    ? `<image href="${base64Avatar}" x="20" y="24" width="72" height="72" clip-path="url(#avatar)"/>`
+    : `<circle cx="56" cy="56" r="36" fill="${muted}"/>`;
 
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="495" height="195" viewBox="0 0 495 195">
