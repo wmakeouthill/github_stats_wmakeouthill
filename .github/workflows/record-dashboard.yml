@@ -31,12 +31,12 @@ jobs:
 
           (async () => {
             const browser = await puppeteer.launch({
-              args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1600,1200']
+              args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1600,1024']
             });
             const page = await browser.newPage();
             
-            // Forca tamanho da janela ser "1600x1200" pra abraçar o max-width inteiro do CSS sem sufocar os cards
-            await page.setViewport({ width: 1600, height: 1200, deviceScaleFactor: 2 });
+            // Forca tamanho da janela ser super wide p/ horizontal, mas curto na vertical cortando as fitas pretas
+            await page.setViewport({ width: 1600, height: 1024, deviceScaleFactor: 2 });
             
             // Acessa o painel de producao no Vercel
             const timestamp = new Date().getTime();
@@ -51,12 +51,12 @@ jobs:
             const Config = {
               followNewTab: false,
               fps: 30,
-              videoFrame: { width: 1600, height: 1200 },
+              videoFrame: { width: 1600, height: 1024 },
               videoCrf: 28,
               videoCodec: 'libx264',
               videoPreset: 'ultrafast',
               videoBitrate: 2500,
-              aspectRatio: '4:3'
+              aspectRatio: '16:10' // Encaixe matematicamente perfeito de proporcao sem distorcoes
             };
             
             const recorder = new PuppeteerScreenRecorder(page, Config);
