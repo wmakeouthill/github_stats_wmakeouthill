@@ -177,21 +177,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ${topLangs.length === 0 ? `<text x="0" y="15" fill="#9CA3AF" font-size="11">Nenhum astro...</text>` : ''}
     </g>
 
-    <!-- Oráculo movido para baixo para não dar conflito horizontal -->
-    <g transform="translate(0, 115)">
+    <!-- Oráculo Compacto para Respirar -->
+    <g transform="translate(0, 110)">
       <text x="0" y="0" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">⏳ ORÁCULO</text>
       
       <!-- Linha 1: Dias Ativos -->
-      <text x="0" y="25" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Dias Ativos</text>
-      <text x="100" y="25" fill="#10B981" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.activeDays}</text>
+      <text x="0" y="20" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Dias Ativos</text>
+      <text x="100" y="20" fill="#10B981" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.activeDays}</text>
       
       <!-- Linha 2: Pico de Energia -->
-      <text x="0" y="45" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Pico de Energia</text>
-      <text x="100" y="45" fill="#F3F4F6" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.maxCommits}</text>
+      <text x="0" y="40" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Pico de Energia</text>
+      <text x="100" y="40" fill="#F3F4F6" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.maxCommits}</text>
       
       <!-- Linha 3: Foco Cósmico -->
-      <text x="0" y="65" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Foco Cósmico</text>
-      <text x="100" y="65" fill="#c084fc" font-family="monospace" font-size="13" font-weight="bold">${oracleStats.bestDay}</text>
+      <text x="0" y="60" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Foco Cósmico</text>
+      <text x="100" y="60" fill="#c084fc" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.bestDay}</text>
     </g>
   </g>
 
