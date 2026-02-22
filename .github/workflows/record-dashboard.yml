@@ -31,32 +31,32 @@ jobs:
 
           (async () => {
             const browser = await puppeteer.launch({
-              args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1440,960']
+              args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1600,1200']
             });
             const page = await browser.newPage();
             
-            // Forca tamanho de janela "Desktop Monitor Wide" para os cards respirarem e as linhas de baixo caberem
-            await page.setViewport({ width: 1440, height: 960, deviceScaleFactor: 2 });
+            // Forca tamanho da janela ser "1600x1200" pra abraçar o max-width inteiro do CSS sem sufocar os cards
+            await page.setViewport({ width: 1600, height: 1200, deviceScaleFactor: 2 });
             
-            // Acessa o painel de producao no Vercel (garantir cache limpo com query param / timestamp random)
+            // Acessa o painel de producao no Vercel
             const timestamp = new Date().getTime();
             await page.goto(`https://github-stats-wmakeouthill.vercel.app/?fresh=true&t=${timestamp}`, { 
-              waitUntil: 'networkidle0', // Espera todos os SVGs, APIS e Efeitos de Particula carregarem
+              waitUntil: 'networkidle0',
               timeout: 60000 
             });
 
-            // Deixa a pagina assentar pacientemente pra ondas carregarem
+            // Respiro pro React montar o Grimorio e preencher os espacos
             await new Promise(r => setTimeout(r, 5000));
 
             const Config = {
               followNewTab: false,
               fps: 30,
-              videoFrame: { width: 1440, height: 960 },
+              videoFrame: { width: 1600, height: 1200 },
               videoCrf: 28,
               videoCodec: 'libx264',
               videoPreset: 'ultrafast',
               videoBitrate: 2500,
-              aspectRatio: '16:9'
+              aspectRatio: '4:3'
             };
             
             const recorder = new PuppeteerScreenRecorder(page, Config);
