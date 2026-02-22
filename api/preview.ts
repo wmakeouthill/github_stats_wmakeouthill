@@ -106,9 +106,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ? `<image href="${base64Avatar}" x="25" y="45" width="70" height="70" clip-path="url(#avatar)"/>`
     : `<circle cx="60" cy="80" r="35" fill="${muted}"/>`;
 
-  // Montagem SVG (Widescreen 900x230)
+  // Montagem SVG (Widescreen 940x230)
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="230" viewBox="0 0 900 230">
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="230" viewBox="0 0 940 230">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#0f0c29"/>
@@ -124,10 +124,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     </filter>
   </defs>
   
-  <rect width="900" height="230" rx="12" fill="url(#bg)" stroke="#DBC27D" stroke-width="1.5"/>
-  <rect width="900" height="5" fill="#6B21A8" rx="2" opacity="0.8"/>
-  <text x="450" y="24" fill="#DBC27D" font-family="Courier New, monospace" font-size="12" font-weight="bold" text-anchor="middle" letter-spacing="2">✦ DASHBOARD CÓSMICO COMPACTADO ✦</text>
-  <line x1="30" y1="34" x2="870" y2="34" stroke="#4B5563" stroke-dasharray="2,2" stroke-width="1" opacity="0.3"/>
+  <rect width="940" height="230" rx="12" fill="url(#bg)" stroke="#DBC27D" stroke-width="1.5"/>
+  <rect width="940" height="5" fill="#6B21A8" rx="2" opacity="0.8"/>
+  <text x="470" y="24" fill="#DBC27D" font-family="Courier New, monospace" font-size="12" font-weight="bold" text-anchor="middle" letter-spacing="2">✦ DASHBOARD CÓSMICO COMPACTADO ✦</text>
+  <line x1="30" y1="34" x2="910" y2="34" stroke="#4B5563" stroke-dasharray="2,2" stroke-width="1" opacity="0.3"/>
 
   <!-- Coluna 1: Perfil (Largura expandida para respirar) -->
   <g transform="translate(10, 0)">
@@ -135,20 +135,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     <text x="110" y="70" fill="#EAEAEA" font-family="system-ui, sans-serif" font-size="20" font-weight="800">@${profile.login}</text>
     <text x="110" y="90" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12" font-style="italic">Arquiteto do Vácuo</text>
     
+    <!-- Aproximados para a esquerda para não encostar na Coluna 2 -->
     <g transform="translate(110, 115)">
       <text x="0" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Seguidores</text>
       <text x="0" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.followers}</text>
-      <text x="80" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Repos</text>
-      <text x="80" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.publicRepos}</text>
-      <text x="145" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Estrelas</text>
-      <text x="145" y="20" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="16" font-weight="bold" filter="url(#glow)">${profile.totalStars} ★</text>
+      
+      <text x="65" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Repos</text>
+      <text x="65" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.publicRepos}</text>
+      
+      <text x="120" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Estrelas</text>
+      <text x="120" y="20" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="16" font-weight="bold" filter="url(#glow)">${profile.totalStars} ★</text>
     </g>
   </g>
 
-  <line x1="310" y1="50" x2="310" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
+  <line x1="300" y1="50" x2="300" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
 
-  <!-- Coluna 2: Poeira Cósmica (Empurrado para a Direita) -->
-  <g transform="translate(330, 55)">
+  <!-- Coluna 2: Poeira Cósmica -->
+  <g transform="translate(320, 55)">
     <text x="0" y="0" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">✦ POEIRA CÓSMICA <tspan fill="#8b949e" font-size="10" font-weight="normal">(365 Dias)</tspan></text>
     
     <text x="0" y="30" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Total Commits</text>
@@ -166,54 +169,57 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   <line x1="530" y1="50" x2="530" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
 
-  <!-- Coluna 3: Astros e Oráculo (Empurrado para a Direita) -->
-  <g transform="translate(560, 50)">
+  <!-- Coluna 3: Astros e Oráculo (Largura otimizada para lado a lado) -->
+  <g transform="translate(550, 50)">
     <text x="0" y="0" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">✦ ASTROS ÓRFÃOS</text>
     <g transform="translate(0, 15)">
       ${topLangs.map((l, i) => `
-        <circle cx="5" cy="${i * 18 + 5}" r="4" fill="${l.color}" />
-        <text x="15" y="${i * 18 + 9}" fill="#EAEAEA" font-family="system-ui" font-size="11">${l.name}</text>
+        <circle cx="5" cy="${i * 16 + 4}" r="4" fill="${l.color}" />
+        <text x="15" y="${i * 16 + 8}" fill="#EAEAEA" font-family="system-ui" font-size="11">${l.name}</text>
       `).join('')}
       ${topLangs.length === 0 ? `<text x="0" y="15" fill="#9CA3AF" font-size="11">Nenhum astro...</text>` : ''}
     </g>
 
-    <!-- Oráculo Compacto para Respirar -->
-    <g transform="translate(0, 110)">
+    <!-- Oráculo em 2 Linhas: Pico e Foco Lado a Lado! -->
+    <g transform="translate(0, 105)">
       <text x="0" y="0" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">⏳ ORÁCULO</text>
       
       <!-- Linha 1: Dias Ativos -->
-      <text x="0" y="20" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Dias Ativos</text>
-      <text x="100" y="20" fill="#10B981" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.activeDays}</text>
+      <text x="0" y="16" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Dias Ativos</text>
+      <text x="65" y="16" fill="#10B981" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.activeDays}</text>
       
-      <!-- Linha 2: Pico de Energia -->
-      <text x="0" y="40" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Pico de Energia</text>
-      <text x="100" y="40" fill="#F3F4F6" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.maxCommits}</text>
+      <!-- Linha 2: Pico de Energia + Foco Cósmico -->
+      <text x="0" y="32" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Pico Energia</text>
+      <text x="65" y="32" fill="#F3F4F6" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.maxCommits}</text>
       
-      <!-- Linha 3: Foco Cósmico -->
-      <text x="0" y="60" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Foco Cósmico</text>
-      <text x="100" y="60" fill="#c084fc" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.bestDay}</text>
+      <text x="95" y="32" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="9">Foco Cósmico:</text>
+      <text x="165" y="32" fill="#c084fc" font-family="monospace" font-size="12" font-weight="bold">${oracleStats.bestDay}</text>
     </g>
   </g>
 
-  <line x1="740" y1="50" x2="740" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
+  <line x1="770" y1="50" x2="770" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
 
-  <!-- Coluna 4: Streak (Empurrado para a Direita) -->
-  <g transform="translate(760, 55)">
+  <!-- Coluna 4: Streak -->
+  <g transform="translate(790, 55)">
+    <!-- Streak Atual -->
     <circle cx="5" cy="-4" r="5" fill="#10B981" />
     <text x="18" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12">STREAK ATUAL</text>
     <text x="18" y="28" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="28" font-weight="bold">${streak.current}</text>
-    <text x="55" y="28" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12"> dias</text>
+    <text x="${18 + String(streak.current).length * 16 + 5}" y="26" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">dias</text>
 
-    <path d="M5,50 C5,50 10,45 10,40 C10,35 5,30 5,30 C5,30 0,35 0,40 C0,45 5,50 5,50 Z" fill="#DBC27D" transform="translate(-10, 15) scale(0.7)"/>
-    <text x="18" y="65" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12">MAIOR RECORDE</text>
-    <text x="18" y="93" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="28" font-weight="bold" filter="url(#glow)">${streak.longest}</text>
-    <text x="55" y="93" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12"> dias</text>
+    <!-- Maior Recorde -->
+    <!-- Diamante em ícone colado ao texto igual a bolinha do Streak Atual -->
+    <path d="M 5,59 L 9,65 L 5,71 L 1,65 Z" fill="#DBC27D"/>
+    
+    <text x="18" y="69" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12">MAIOR RECORDE</text>
+    <text x="18" y="97" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="28" font-weight="bold">${streak.longest}</text>
+    <text x="${18 + String(streak.longest).length * 16 + 5}" y="95" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">dias</text>
   </g>
 
   <!-- Rodapé -->
-  <line x1="30" y1="195" x2="870" y2="195" stroke="#4B5563" stroke-dasharray="2,2" stroke-width="1" opacity="0.3"/>
-  <rect x="350" y="202" width="200" height="20" rx="10" fill="#1E1B4B" opacity="0.8"/>
-  <text x="450" y="216" fill="#c084fc" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Acessar App Interativo Original ✦</text>
+  <line x1="30" y1="195" x2="910" y2="195" stroke="#4B5563" stroke-dasharray="2,2" stroke-width="1" opacity="0.3"/>
+  <rect x="370" y="202" width="200" height="20" rx="10" fill="#1E1B4B" opacity="0.8"/>
+  <text x="470" y="216" fill="#c084fc" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Acessar App Interativo Original ✦</text>
 </svg>`;
 
   res.setHeader('Content-Type', 'image/svg+xml');
