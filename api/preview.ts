@@ -21,7 +21,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let oracleStats: any = { activeDays: 0, maxCommits: 0 };
 
   try {
-    const apiRes = await fetch(`${baseUrl}/api/github-stats?username=${encodeURIComponent(username)}`);
+    // Fazemos a chamada interna sempre bypassando o cache de Edge da Vercel (&fresh=true) 
+    // porque o Próprio SVG retornado para o Readme já engatilhará o seu Cache de 60min ali na frente.
+    const apiRes = await fetch(`${baseUrl}/api/github-stats?username=${encodeURIComponent(username)}&fresh=true`);
     if (!apiRes.ok) throw new Error('Stats API failed');
     const data = await apiRes.json() as any;
 
