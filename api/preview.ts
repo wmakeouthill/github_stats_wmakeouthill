@@ -55,9 +55,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Oráculo Calc
     const calendar = contributions.calendar || [];
-    oracleStats.activeDays = calendar.filter((d: any) => d.count > 0).length;
-    const maxDay = calendar.reduce((max: any, d: any) => d.count > max.count ? d : max, { count: 0, date: '' });
-    oracleStats.maxCommits = maxDay.count;
+    let maxCommits = 0;
+    let maxDate = '';
+    const dayCounts = [0, 0, 0, 0, 0, 0, 0];
+    let activeDays = 0;
+
+    calendar.forEach((d: any) => {
+      if (d.count > maxCommits) {
+        maxCommits = d.count;
+        maxDate = d.date;
+      }
+      if (d.count > 0) {
+        activeDays++;
+        const dateObj = new Date(d.date + 'T12:00:00Z');
+        dayCounts[dateObj.getDay()] += d.count;
+      }
+    });
+
+    const maxDayIndex = dayCounts.indexOf(Math.max(...dayCounts));
+    const dayNames = ['Domingos', 'Segundas', 'Terças', 'Quartas', 'Quintas', 'Sextas', 'Sábados'];
+
+    oracleStats.bestDay = dayNames[maxDayIndex] || '-';
+    oracleStats.activeDays = activeDays;
+    oracleStats.maxCommits = maxCommits;
+    oracleStats.maxDate = maxDate;
 
   } catch (e) {
     console.warn('Erro ao processar dados customizados no preview.', e);
@@ -157,14 +178,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     </g>
 
     <!-- Oráculo movido para baixo para não dar conflito horizontal -->
-    <g transform="translate(0, 115)">
+    <g transform="translate(0, 105)">
       <text x="0" y="0" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">⏳ ORÁCULO</text>
       
-      <text x="0" y="25" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Dias Ativos (Ano)</text>
-      <text x="100" y="25" fill="#10B981" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.activeDays}</text>
+      <text x="0" y="25" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Foco Cósmico</text>
+      <text x="100" y="25" fill="#c084fc" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.bestDay}</text>
+
+      <text x="0" y="45" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Dias Ativos</text>
+      <text x="100" y="45" fill="#10B981" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.activeDays}</text>
       
-      <text x="0" y="45" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Pico de Energia</text>
-      <text x="100" y="45" fill="#F3F4F6" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.maxCommits}</text>
+      <text x="0" y="65" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Pico de Energia</text>
+      <text x="75" y="65" fill="#F3F4F6" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.maxCommits}</text>
+      <text x="105" y="64" fill="#6B7280" font-family="system-ui, sans-serif" font-size="9">(${oracleStats.maxDate})</text>
     </g>
   </g>
 
