@@ -97,7 +97,7 @@ function calculateFallbackStreak(weeks: any[]): { current: number; longest: numb
 async function fetchGlobalStreak(username: string, fallbackWeeks: any[]) {
     const fallback = calculateFallbackStreak(fallbackWeeks);
     try {
-        const res = await fetch(`https://github-readme-streak-stats.herokuapp.com/?user=${username}&type=json`);
+        const res = await fetch(`https://github-readme-streak-stats.herokuapp.com/?user=${username}&type=json&timezone=America/Sao_Paulo`);
         if (!res.ok) throw new Error('Global streak api failed');
         const streakData = await res.json() as any;
 

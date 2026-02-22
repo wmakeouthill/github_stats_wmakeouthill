@@ -20,6 +20,9 @@ export function ContributionNebula({ contributions, className = '' }: Contributi
 
             <div className={styles.title}>
                 <span className="font-cinzel">✦ Poeira Cósmica</span>
+                <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginLeft: '12px', opacity: 0.7, fontFamily: 'monospace', letterSpacing: '0px' }}>
+                    (Últimos 365 dias)
+                </span>
             </div>
 
             <div className={styles.skyGrid} dir="ltr" ref={scrollRef}>
