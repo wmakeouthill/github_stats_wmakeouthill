@@ -189,7 +189,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       <text x="0" y="45" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Pico de Energia</text>
       <text x="75" y="45" fill="#F3F4F6" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.maxCommits}</text>
       
-      <text x="100" y="45" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="9">Foco:</text>
+      <text x="100" y="45" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="9">Foco cósmico:</text>
       <text x="130" y="45" fill="#c084fc" font-family="monospace" font-size="11" font-weight="bold">${oracleStats.bestDay}</text>
     </g>
   </g>
