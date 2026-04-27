@@ -15,6 +15,20 @@ query Languages($username: String!) {
         }
       }
     }
+    repositoriesContributedTo(
+      first: 100,
+      includeUserRepositories: false,
+      contributionTypes: [COMMIT, PULL_REQUEST, PULL_REQUEST_REVIEW]
+    ) {
+      nodes {
+        languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+          edges {
+            size
+            node { name color }
+          }
+        }
+      }
+    }
   }
 }
 `;
@@ -54,7 +68,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        const repos = data.user.repositories.nodes || [];
+        const ownedRepos = data.user.repositories.nodes || [];
+        const contributedRepos = data.user.repositoriesContributedTo?.nodes || [];
+        const repos = [...ownedRepos, ...contributedRepos];
 
         const langMap = new Map<string, { name: string; color: string; size: number; repoCount: number }>();
         let totalSize = 0;

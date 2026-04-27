@@ -26,6 +26,13 @@ query GitHubStats($username: String!) {
         updatedAt
       }
     }
+    repositoriesContributedTo(
+      first: 1,
+      includeUserRepositories: false,
+      contributionTypes: [COMMIT, PULL_REQUEST, ISSUE, REPOSITORY, PULL_REQUEST_REVIEW]
+    ) {
+      totalCount
+    }
     contributionsCollection {
       totalCommitContributions
       totalPullRequestContributions
@@ -200,7 +207,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 totalCommits: contribs.totalCommitContributions,
                 totalPRs: contribs.totalPullRequestContributions,
                 totalIssues: contribs.totalIssueContributions,
-                totalRepos: contribs.totalRepositoryContributions,
+                totalRepos: u.repositories.totalCount + (u.repositoriesContributedTo?.totalCount || 0),
                 calendar: flatCalendar
             },
             streak,
