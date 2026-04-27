@@ -28,7 +28,7 @@ export function ProfileCard({ profile, className = '', actionButton }: ProfileCa
 
             <div className={styles.statsGrid}>
                 <div className={styles.statBox}>
-                    <span className={`${styles.statValue} font-mono`}>{formatNum(profile.publicRepos)}</span>
+                    <span className={`${styles.statValue} font-mono`}>{formatNum(profile.ownedRepos)}</span>
                     <span className={styles.statLabel}>Repos</span>
                 </div>
                 <div className={styles.statBox}>

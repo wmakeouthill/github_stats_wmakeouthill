@@ -166,7 +166,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     <text x="115" y="80" fill="#34d399" font-family="monospace" font-size="14" font-weight="bold">${contributions.totalIssues}</text>
 
     <text x="0" y="105" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Repositórios Contrib.</text>
-    <text x="115" y="105" fill="#93c5fd" font-family="monospace" font-size="14" font-weight="bold">${profile.contributedRepos}</text>
+    <text x="115" y="105" fill="#93c5fd" font-family="monospace" font-size="14" font-weight="bold">${contributions.totalRepos}</text>
   </g>
 
   <line x1="530" y1="50" x2="530" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
