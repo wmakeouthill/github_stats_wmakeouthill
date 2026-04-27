@@ -8,6 +8,8 @@ export interface GitHubProfile {
     followers: number;
     following: number;
     publicRepos: number;
+    ownedRepos: number;
+    contributedRepos: number;
     totalStars: number;
     totalForks: number;
 }

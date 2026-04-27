@@ -14,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ? 'http://localhost:3000'
     : 'https://github-stats-wmakeouthill.vercel.app';
 
-  let profile: any = { login: username, followers: 0, publicRepos: 0, totalStars: 0 };
+  let profile: any = { login: username, followers: 0, publicRepos: 0, ownedRepos: 0, contributedRepos: 0, totalStars: 0 };
   let streak: any = { current: 0, longest: 0 };
   let contributions: any = { totalCommits: 0, totalPRs: 0, totalIssues: 0, totalRepos: 0 };
   let topLangs: any[] = [];
@@ -31,6 +31,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       login: data.profile?.login || username,
       followers: data.profile?.followers ?? 0,
       publicRepos: data.profile?.publicRepos ?? 0,
+      ownedRepos: data.profile?.ownedRepos ?? 0,
+      contributedRepos: data.profile?.contributedRepos ?? 0,
       totalStars: data.profile?.totalStars ?? 0,
       avatarUrl: data.profile?.avatarUrl
     };
@@ -141,7 +143,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       <text x="0" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.followers}</text>
       
       <text x="65" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Repos</text>
-      <text x="65" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.publicRepos}</text>
+      <text x="65" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.ownedRepos}</text>
       
       <text x="120" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Estrelas</text>
       <text x="120" y="20" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="16" font-weight="bold" filter="url(#glow)">${profile.totalStars} ★</text>
@@ -164,7 +166,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     <text x="115" y="80" fill="#34d399" font-family="monospace" font-size="14" font-weight="bold">${contributions.totalIssues}</text>
 
     <text x="0" y="105" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Repositórios Contrib.</text>
-    <text x="115" y="105" fill="#93c5fd" font-family="monospace" font-size="14" font-weight="bold">${contributions.totalRepos}</text>
+    <text x="115" y="105" fill="#93c5fd" font-family="monospace" font-size="14" font-weight="bold">${profile.contributedRepos}</text>
   </g>
 
   <line x1="530" y1="50" x2="530" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>

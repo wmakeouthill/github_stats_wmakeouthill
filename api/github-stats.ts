@@ -161,6 +161,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const repos = u.repositories.nodes || [];
         const totalStars = repos.reduce((acc: number, r: any) => acc + (r.stargazerCount || 0), 0);
         const totalForks = repos.reduce((acc: number, r: any) => acc + (r.forkCount || 0), 0);
+        const ownedReposCount = u.repositories.totalCount;
+        const contributedReposCount = u.repositoriesContributedTo?.totalCount || 0;
 
         const contribs = u.contributionsCollection;
         const calendar = contribs.contributionCalendar;
@@ -199,7 +201,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 createdAt: u.createdAt,
                 followers: u.followers.totalCount,
                 following: u.following.totalCount,
-                publicRepos: u.repositories.totalCount,
+                publicRepos: ownedReposCount + contributedReposCount,
+                ownedRepos: ownedReposCount,
+                contributedRepos: contributedReposCount,
                 totalStars,
                 totalForks
             },
@@ -207,7 +211,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 totalCommits: contribs.totalCommitContributions,
                 totalPRs: contribs.totalPullRequestContributions,
                 totalIssues: contribs.totalIssueContributions,
-                totalRepos: u.repositories.totalCount + (u.repositoriesContributedTo?.totalCount || 0),
+                totalRepos: ownedReposCount + contributedReposCount,
                 calendar: flatCalendar
             },
             streak,

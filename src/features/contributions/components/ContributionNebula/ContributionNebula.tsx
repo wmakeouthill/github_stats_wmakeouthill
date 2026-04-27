@@ -61,7 +61,7 @@ export function ContributionNebula({ contributions, className = '' }: Contributi
                 <span><b>{contributions.totalCommits}</b> Commits</span>
                 <span><b>{contributions.totalPRs}</b> PRs</span>
                 <span><b>{contributions.totalIssues}</b> Issues</span>
-                <span><b>{contributions.totalRepos}</b> Repos</span>
+                <span><b>{contributions.totalRepos}</b> Repos Contrib.</span>
             </div>
 
         </GothicCard>
