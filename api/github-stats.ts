@@ -53,13 +53,46 @@ query GitHubStats($username: String!) {
 }
 `;
 
-function calculateFallbackStreak(weeks: any[]): { current: number; longest: number; todayContributed: boolean } {
+type StreakSummary = {
+    current: number;
+    longest: number;
+    longestStart?: string;
+    longestEnd?: string;
+    todayContributed: boolean;
+};
+
+function getDateStringInTimeZone(timeZone: string): string {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).formatToParts(new Date());
+
+    const year = parts.find((part) => part.type === 'year')?.value;
+    const month = parts.find((part) => part.type === 'month')?.value;
+    const day = parts.find((part) => part.type === 'day')?.value;
+
+    if (!year || !month || !day) {
+        throw new Error(`Nao foi possivel calcular a data no fuso ${timeZone}`);
+    }
+
+    return `${year}-${month}-${day}`;
+}
+
+function shiftDateString(date: string, days: number): string {
+    const [year, month, day] = date.split('-').map(Number);
+    const utcDate = new Date(Date.UTC(year, month - 1, day));
+    utcDate.setUTCDate(utcDate.getUTCDate() + days);
+
+    return utcDate.toISOString().slice(0, 10);
+}
+
+function calculateFallbackStreak(weeks: any[]): StreakSummary {
     const allDays = weeks.flatMap((w: any) => w.contributionDays);
 
-    // Obter data exata em Brasília (São Paulo) para evitar o Vercel UTC de pular um dia ou errar
-    const spTime = new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-    const spDate = new Date(spTime);
-    const todayStr = spDate.getFullYear() + '-' + String(spDate.getMonth() + 1).padStart(2, '0') + '-' + String(spDate.getDate()).padStart(2, '0');
+    // Obter a data corrente no fuso do usuario para nao cortar o calendario em UTC.
+    const todayStr = getDateStringInTimeZone('America/Sao_Paulo');
 
     // O Github envia a semana toda, portanto os dias depois de hoje (no futuro) devem ser filtrados
     const validDays = allDays.filter((d: any) => d.date <= todayStr);
@@ -72,32 +105,53 @@ function calculateFallbackStreak(weeks: any[]): { current: number; longest: numb
 
     let current = 0;
     let longest = 0;
+    let longestStart: string | undefined;
+    let longestEnd: string | undefined;
     let tempStreak = 0;
 
     // Calcula a maior sequência de contribuições (Nota: Dentre os 365 dias que o GraphQL retorna)
     for (let i = 0; i < validDays.length; i++) {
         if (validDays[i].contributionCount > 0) {
             tempStreak++;
-            if (tempStreak > longest) longest = tempStreak;
+            if (tempStreak > longest) {
+                longest = tempStreak;
+                longestStart = validDays[i - tempStreak + 1].date;
+                longestEnd = validDays[i].date;
+            }
         } else {
             tempStreak = 0;
         }
     }
 
-    // Calcula o streak atual, contando de hoje de trás pra frente
+    // Calcula o streak atual com tolerancia para atraso do GitHub no dia anterior.
     for (let i = todayIndex; i >= 0; i--) {
+        const daysFromToday = todayIndex - i;
+
         if (validDays[i].contributionCount > 0) {
             current++;
         } else if (i === todayIndex) {
-            // Hoje teve 0 contribs ainda, mas o dia não acabou no Brasil. Pula pra ontem e continua!
+            // Hoje ainda pode receber contribuicoes ate o fim do dia no Brasil.
             continue;
+        } else if (daysFromToday === 1) {
+            // O GitHub pode atrasar ou reclassificar contribuicoes recentes pelo fuso do commit.
+            current++;
         } else {
             // Zerou num dia do passado: game over do streak ativo.
             break;
         }
     }
 
-    return { current, longest, todayContributed };
+    if (current > longest) {
+        const currentEnd = todayContributed ? validDays[todayIndex].date : validDays[todayIndex - 1]?.date;
+
+        if (currentEnd) {
+            longest = current;
+            longestStart = shiftDateString(currentEnd, -(current - 1));
+            longestEnd = currentEnd;
+        }
+    }
+
+    return { current, longest, longestStart, longestEnd, todayContributed };
 }
 
 // Fetch Global All-Time Streaks from Readme-Streak-Stats hidden API
@@ -108,11 +162,15 @@ async function fetchGlobalStreak(username: string, fallbackWeeks: any[]) {
         if (!res.ok) throw new Error('Global streak api failed');
         const streakData = await res.json() as any;
 
+        const remoteLongest = streakData.longestStreak?.length || 0;
+        const useRemoteLongest = remoteLongest >= fallback.longest;
+
         return {
-            current: streakData.currentStreak?.length || fallback.current,
-            longest: streakData.longestStreak?.length || fallback.longest,
-            longestStart: streakData.longestStreak?.start,
-            longestEnd: streakData.longestStreak?.end,
+            // O streak atual precisa refletir o calendario do GitHub no fuso local.
+            current: fallback.current,
+            longest: useRemoteLongest ? remoteLongest : fallback.longest,
+            longestStart: useRemoteLongest ? streakData.longestStreak?.start : undefined,
+            longestEnd: useRemoteLongest ? streakData.longestStreak?.end : undefined,
             todayContributed: fallback.todayContributed
         };
     } catch (e) {
