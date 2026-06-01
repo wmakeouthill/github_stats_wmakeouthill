@@ -77,7 +77,6 @@
     align-items: center;
     margin: auto 0;
     /* Centraliza perfeitamente no gap restante livre do painel flex */
-    contain: layout paint;
 }
 
 .solarSystemExpanded {
