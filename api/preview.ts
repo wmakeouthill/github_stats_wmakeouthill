@@ -187,7 +187,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       <text x="0" y="0" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">⏳ ORÁCULO</text>
       
       <!-- Linha 1: Dias Ativos -->
-      <text x="0" y="16" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Dias Ativos</text>
+      <text x="0" y="16" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Dias ativos</text>
       <text x="65" y="16" fill="#10B981" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.activeDays}</text>
       
       <!-- Linha 2: Pico de Energia + Foco Cósmico -->

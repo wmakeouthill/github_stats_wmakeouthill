@@ -47,7 +47,7 @@ export function TimeOracle({ contributions, className = '' }: { contributions: C
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.8rem', color: 'var(--ash-gray)', borderTop: '1px dashed var(--midnight-blue)', paddingTop: '8px', marginTop: 'auto', width: '100%' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 8px' }}>
-                    <span>Dias Ativos no ano:</span> <b style={{ color: 'var(--spectral-green)' }}>{stats.activeDays} </b>
+                    <span>Dias ativos no período:</span> <b style={{ color: 'var(--spectral-green)' }}>{stats.activeDays} </b>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 8px' }}>
                     <span>Maior pico diário:</span> <b style={{ color: 'var(--phantom-white)' }} title={stats.maxDate}>{stats.maxCommits} energias</b>
