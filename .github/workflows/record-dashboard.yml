@@ -16,12 +16,12 @@ jobs:
       - name: Instalar NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: "lts/*"
+          node-version: "20"
 
       - name: Instalar dependencias do Headless Browser (Puppeteer)
         run: |
           npm init -y
-          npm install puppeteer puppeteer-screen-recorder
+          npm install puppeteer@19.0.0 puppeteer-screen-recorder@3.0.6
 
       - name: Criar Script de Gravacao Automatica do Dashboard
         run: |
@@ -31,6 +31,8 @@ jobs:
 
           (async () => {
             const browser = await puppeteer.launch({
+              headless: true,
+              timeout: 120000,
               args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1600,1024']
             });
             const page = await browser.newPage();
