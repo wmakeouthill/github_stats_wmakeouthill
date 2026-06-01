@@ -10,7 +10,9 @@
 
 .headerBox {
     display: flex;
-    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
     width: 100%;
     margin-bottom: 2px;
     z-index: 50;
@@ -34,6 +36,38 @@
     margin-top: 2px;
 }
 
+.expandButton,
+.closeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(219, 194, 125, 0.25);
+    background: rgba(15, 23, 42, 0.76);
+    color: var(--phantom-white);
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.expandButton {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    flex: 0 0 auto;
+}
+
+.expandButton svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.expandButton:hover,
+.closeButton:hover {
+    transform: translateY(-1px);
+    border-color: rgba(219, 194, 125, 0.65);
+    background: rgba(30, 41, 59, 0.92);
+}
+
 .solarSystem {
     position: relative;
     width: 1px;
@@ -43,6 +77,11 @@
     align-items: center;
     margin: auto 0;
     /* Centraliza perfeitamente no gap restante livre do painel flex */
+}
+
+.solarSystemExpanded {
+    transform: scale(2.35);
+    transform-origin: center;
 }
 
 /* O sol (Centro gravitacional - Avatar/Buraco Negro) */
@@ -87,7 +126,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 0 0 10px currentColor;
+    box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.45), 0 0 10px currentColor, 0 0 2px rgba(255, 255, 255, 0.6);
     /* Falso 3d */
     cursor: pointer;
     transition: transform 0.2s;
@@ -143,4 +182,66 @@
 .emptyState {
     color: var(--ash-gray);
     margin-top: 50px;
+}
+
+.modalBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(16px, 4vw, 40px);
+    background: rgba(3, 7, 18, 0.82);
+    backdrop-filter: blur(10px);
+}
+
+.modalPanel {
+    position: relative;
+    width: min(920px, 94vw);
+    height: min(680px, 88vh);
+    overflow: hidden;
+    border: 1px solid rgba(219, 194, 125, 0.22);
+    border-radius: 8px;
+    background:
+        radial-gradient(circle at center, rgba(219, 194, 125, 0.08), transparent 34%),
+        linear-gradient(145deg, rgba(7, 10, 24, 0.98), rgba(12, 18, 34, 0.98));
+    box-shadow: 0 26px 80px rgba(0, 0, 0, 0.65);
+}
+
+.modalHeader {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+}
+
+.closeButton {
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.modalOrbitStage {
+    position: absolute;
+    inset: 82px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+@media (max-width: 640px) {
+    .solarSystemExpanded {
+        transform: scale(1.65);
+    }
+
+    .modalPanel {
+        height: min(560px, 86vh);
+    }
 }

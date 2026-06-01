@@ -2,6 +2,27 @@ import { useMemo } from 'react';
 import { useLanguages } from '../../hooks/useLanguages';
 import { PlanetData } from './LanguagePlanets.types';
 
+function normalizePlanetColor(color: string): string {
+    const fallbackColor = '#A78BFA';
+    const hex = color?.replace('#', '');
+
+    if (!hex || hex.length !== 6) return fallbackColor;
+
+    const red = parseInt(hex.slice(0, 2), 16);
+    const green = parseInt(hex.slice(2, 4), 16);
+    const blue = parseInt(hex.slice(4, 6), 16);
+    const luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+
+    if (luminance >= 95) return color;
+
+    const lift = 95 - luminance;
+    const nextRed = Math.min(255, Math.round(red + lift * 0.75));
+    const nextGreen = Math.min(255, Math.round(green + lift * 0.75));
+    const nextBlue = Math.min(255, Math.round(blue + lift * 0.75));
+
+    return `#${[nextRed, nextGreen, nextBlue].map(channel => channel.toString(16).padStart(2, '0')).join('')}`;
+}
+
 export function useLanguagePlanets() {
     const { data, isLoading, isError } = useLanguages();
 
@@ -34,7 +55,8 @@ export function useLanguagePlanets() {
                 radiusPixels,
                 orbitRadius,
                 orbitDurationSec,
-                startDelaySec
+                startDelaySec,
+                displayColor: normalizePlanetColor(lang.color)
             };
         });
     }, [data]);

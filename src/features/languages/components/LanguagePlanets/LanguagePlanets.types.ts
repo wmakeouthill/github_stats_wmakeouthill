@@ -11,4 +11,5 @@ export interface PlanetData extends LanguageStat {
     orbitRadius: number;
     orbitDurationSec: number;
     startDelaySec: number;
+    displayColor: string;
 }
