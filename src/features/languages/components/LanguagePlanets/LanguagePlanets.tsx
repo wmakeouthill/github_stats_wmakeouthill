@@ -11,8 +11,8 @@ export function LanguagePlanets({ className = '' }: LanguagePlanetsProps) {
     if (isLoading) return <GothicCard className={className}><p className="font-mono" style={{ color: 'var(--ash-gray)' }}>Observando os astros...</p></GothicCard>;
     if (isError) return null; // Fallback ou erro escondido (já que não é crítico)
 
-    const renderSolarSystem = (expanded = false) => (
-        <div className={`${styles.solarSystem} ${expanded ? styles.solarSystemExpanded : ''}`}>
+    const renderSolarSystem = (expanded = false, paused = false) => (
+        <div className={`${styles.solarSystem} ${expanded ? styles.solarSystemExpanded : ''} ${paused ? styles.solarSystemPaused : ''}`}>
             <div className={styles.blackHole} />
 
             {planets.map(p => (
@@ -86,7 +86,7 @@ export function LanguagePlanets({ className = '' }: LanguagePlanetsProps) {
                 {planets.length === 0 ? (
                     <p className={`${styles.emptyState} font-mono`}>Nenhum astro orbitando.</p>
                 ) : (
-                    renderSolarSystem()
+                    renderSolarSystem(false, isExpanded)
                 )}
             </GothicCard>
 

@@ -85,6 +85,12 @@
     transform-origin: center;
 }
 
+.solarSystemPaused .planetWrapper,
+.solarSystemPaused .planet,
+.solarSystemPaused .blackHole {
+    animation-play-state: paused !important;
+}
+
 /* O sol (Centro gravitacional - Avatar/Buraco Negro) */
 .blackHole {
     position: absolute;
