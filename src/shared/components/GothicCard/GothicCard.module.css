@@ -1,0 +1,53 @@
+.card {
+    position: relative;
+    background: linear-gradient(145deg, var(--abyss), #111827);
+    border: 1px solid var(--midnight-blue);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    overflow: visible;
+    /* Necessário para decorações que saem da borda */
+}
+
+/* Decoração do topo em estilo grimório */
+.card::before {
+    content: '✦';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--faded-gold);
+    font-size: 14px;
+    text-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
+    background-color: var(--void-black);
+    padding: 0 4px;
+    z-index: 10;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(107, 33, 168, 0.4);
+    /* Glow roxo cósmico */
+    border-color: rgba(107, 33, 168, 0.6);
+}
+
+/* Partícula lateral sutil */
+.card::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--starlight);
+    opacity: 0.3;
+}
+
+@media (max-width: 768px) {
+    .card {
+        padding: var(--spacing-md);
+    }
+}

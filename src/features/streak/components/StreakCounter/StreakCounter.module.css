@@ -1,0 +1,73 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding: var(--spacing-sm);
+    /* Redução ainda maior para Streak */
+}
+
+.eye {
+    font-size: 2.2rem;
+    line-height: 1;
+    text-shadow: 0 0 10px var(--crimson);
+    animation: pulse-blood 3s ease-in-out infinite;
+    margin-bottom: 0;
+}
+
+.eyeOff {
+    font-size: 2.2rem;
+    line-height: 1;
+    color: var(--ash-gray);
+    margin-bottom: 0;
+}
+
+.streakNumber {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--phantom-white);
+    line-height: 1;
+    margin-bottom: 4px;
+    text-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+}
+
+.streakZero {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--ash-gray);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.label {
+    font-size: 0.9rem;
+    color: var(--starlight);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.quote {
+    font-style: italic;
+    color: var(--faded-gold);
+    margin: var(--spacing-sm) 0;
+    max-width: 90%;
+    line-height: 1.2;
+    font-size: 0.85rem;
+}
+
+.meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.8rem;
+    color: var(--ash-gray);
+    border-top: 1px dashed var(--midnight-blue);
+    padding-top: var(--spacing-sm);
+    width: 100%;
+}
+
+.check {
+    color: var(--spectral-green);
+}

@@ -1,0 +1,34 @@
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    text-align: center;
+    padding: var(--spacing-xl);
+    border: 1px dashed var(--crimson);
+    background-color: rgba(153, 27, 27, 0.05);
+    border-radius: var(--border-radius-lg);
+    gap: var(--spacing-md);
+    margin: var(--spacing-xl) auto;
+    max-width: 600px;
+}
+
+.icon {
+    font-size: 3rem;
+    color: var(--crimson);
+    animation: breathe 3s ease-in-out infinite;
+    text-shadow: 0 0 10px var(--blood-red);
+}
+
+.quote {
+    font-style: italic;
+    color: var(--starlight);
+    font-size: 1.1rem;
+    margin: var(--spacing-md) 0;
+}
+
+.details {
+    font-size: 0.9rem;
+    color: var(--ash-gray);
+}

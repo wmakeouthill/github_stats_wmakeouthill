@@ -1,0 +1,115 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    /* Mais apertado */
+    padding: var(--spacing-sm) var(--spacing-md);
+    /* Força borda mais fina */
+}
+
+.avatarWrapper {
+    position: relative;
+    width: 110px;
+    /* Reduzindo Avatar de 150px para 110px */
+    height: 110px;
+    border-radius: 50%;
+    margin-bottom: 2px;
+    /* Borda com nebulosa animada */
+    background: conic-gradient(from 0deg,
+            var(--abyss),
+            var(--deep-purple),
+            var(--faded-gold),
+            var(--abyss));
+    animation: nebula-spin 10s linear infinite;
+    padding: 3px;
+    /* Espaço da borda animada */
+    box-shadow: 0 0 20px rgba(107, 33, 168, 0.6);
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--void-black);
+    z-index: 2;
+    /* Anti spin (já que o pai gira) */
+    animation: nebula-spin 10s linear infinite reverse;
+}
+
+.name {
+    font-size: 1.6rem;
+    /* Reduzindo font name */
+    margin: 0;
+    text-shadow: 0 0 10px rgba(212, 165, 116, 0.3);
+}
+
+.login {
+    color: var(--starlight);
+    font-size: 1rem;
+    margin-top: -6px;
+    letter-spacing: 1px;
+}
+
+.bio {
+    color: var(--phantom-white);
+    font-style: italic;
+    max-width: 80%;
+    margin: 4px 0;
+    line-height: 1.4;
+    font-size: 0.9rem;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-sm);
+    width: 100%;
+    margin-top: 4px;
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--midnight-blue);
+}
+
+.statBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(30, 27, 75, 0.3);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+    transition: transform 0.2s;
+}
+
+.statBox:hover {
+    transform: translateY(-2px);
+    background: rgba(107, 33, 168, 0.2);
+}
+
+.statValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--phantom-white);
+}
+
+.statLabel {
+    font-size: 0.8rem;
+    color: var(--ash-gray);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+.meta {
+    color: var(--ash-gray);
+    font-size: 0.9rem;
+    margin-top: var(--spacing-md);
+}
+
+@media (max-width: 600px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
