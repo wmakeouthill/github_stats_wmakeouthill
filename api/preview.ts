@@ -1,0 +1,231 @@
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+/**
+ * Retorna um SVG de preview do painel (estilo github-readme-stats).
+ * Uso no README: ![Preview](https://github-stats-wmakeouthill.vercel.app/api/preview)
+ */
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'GET') {
+    return res.status(405).setHeader('Allow', 'GET').end();
+  }
+
+  const username = (req.query.username as string) || process.env.GITHUB_USERNAME || 'wmakeouthill';
+  const baseUrl = process.env.VERCEL_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://github-stats-wmakeouthill.vercel.app';
+
+  let profile: any = { login: username, followers: 0, publicRepos: 0, ownedRepos: 0, contributedRepos: 0, totalStars: 0 };
+  let streak: any = { current: 0, longest: 0 };
+  let contributions: any = { totalCommits: 0, totalPRs: 0, totalIssues: 0, totalRepos: 0 };
+  let topLangs: any[] = [];
+  let oracleStats: any = { activeDays: 0, maxCommits: 0 };
+
+  try {
+    // Fazemos a chamada interna sempre bypassando o cache de Edge da Vercel (&fresh=true) 
+    // porque o Próprio SVG retornado para o Readme já engatilhará o seu Cache de 60min ali na frente.
+    const apiRes = await fetch(`${baseUrl}/api/github-stats?username=${encodeURIComponent(username)}&fresh=true&t=${Date.now()}`);
+    if (!apiRes.ok) throw new Error('Stats API failed');
+    const data = await apiRes.json() as any;
+
+    profile = {
+      login: data.profile?.login || username,
+      followers: data.profile?.followers ?? 0,
+      publicRepos: data.profile?.publicRepos ?? 0,
+      ownedRepos: data.profile?.ownedRepos ?? 0,
+      contributedRepos: data.profile?.contributedRepos ?? 0,
+      totalStars: data.profile?.totalStars ?? 0,
+      avatarUrl: data.profile?.avatarUrl
+    };
+    streak = {
+      current: data.streak?.current ?? 0,
+      longest: data.streak?.longest ?? 0
+    };
+    contributions = data.contributions || contributions;
+
+    // Calcular Linguagens simulando Astros Orfaos
+    const langMap: Record<string, { count: number, color: string }> = {};
+    (data.topRepos || []).forEach((r: any) => {
+      if (r.language && r.language !== 'Unknown') {
+        if (!langMap[r.language]) langMap[r.language] = { count: 0, color: r.languageColor || '#888' };
+        langMap[r.language].count++;
+      }
+    });
+    topLangs = Object.keys(langMap)
+      .map(k => ({ name: k, ...langMap[k] }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5); // 5 principais linguagens
+
+    // Oráculo Calc
+    const calendar = contributions.calendar || [];
+    let maxCommits = 0;
+    let maxDate = '';
+    const dayCounts = [0, 0, 0, 0, 0, 0, 0];
+    let activeDays = 0;
+
+    calendar.forEach((d: any) => {
+      if (d.count > maxCommits) {
+        maxCommits = d.count;
+        maxDate = d.date;
+      }
+      if (d.count > 0) {
+        activeDays++;
+        const dateObj = new Date(d.date + 'T12:00:00Z');
+        dayCounts[dateObj.getDay()] += d.count;
+      }
+    });
+
+    const maxDayIndex = dayCounts.indexOf(Math.max(...dayCounts));
+    const dayNames = ['Domingos', 'Segundas', 'Terças', 'Quartas', 'Quintas', 'Sextas', 'Sábados'];
+
+    oracleStats.bestDay = dayNames[maxDayIndex] || '-';
+    oracleStats.activeDays = activeDays;
+    oracleStats.maxCommits = maxCommits;
+    oracleStats.maxDate = maxDate;
+
+  } catch (e) {
+    console.warn('Erro ao processar dados customizados no preview.', e);
+  }
+
+  const bg = '#002E59';
+  const accent = '#DBC27D';
+  const text = '#e6edf3';
+  const muted = '#8b949e';
+
+  let base64Avatar = '';
+  if (profile.avatarUrl) {
+    try {
+      const imgRes = await fetch(profile.avatarUrl);
+      const arrayBuffer = await imgRes.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const contentType = imgRes.headers.get('content-type') || 'image/jpeg';
+      base64Avatar = `data:${contentType};base64,${buffer.toString('base64')}`;
+    } catch (e) {
+      console.warn('Erro ao baixar avatar em base64', e);
+    }
+  }
+
+  const avatar = base64Avatar
+    ? `<image href="${base64Avatar}" x="25" y="45" width="70" height="70" clip-path="url(#avatar)"/>`
+    : `<circle cx="60" cy="80" r="35" fill="${muted}"/>`;
+
+  // Montagem SVG (Widescreen 940x230)
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="230" viewBox="0 0 940 230">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0c29"/>
+      <stop offset="50%" style="stop-color:#302b63"/>
+      <stop offset="100%" style="stop-color:#24243e"/>
+    </linearGradient>
+    <clipPath id="avatar">
+      <circle cx="60" cy="80" r="35"/>
+    </clipPath>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <rect width="940" height="230" rx="12" fill="url(#bg)" stroke="#DBC27D" stroke-width="1.5"/>
+  <rect width="940" height="5" fill="#6B21A8" rx="2" opacity="0.8"/>
+  <text x="470" y="24" fill="#DBC27D" font-family="Courier New, monospace" font-size="12" font-weight="bold" text-anchor="middle" letter-spacing="2">✦ DASHBOARD CÓSMICO COMPACTADO ✦</text>
+  <line x1="30" y1="34" x2="910" y2="34" stroke="#4B5563" stroke-dasharray="2,2" stroke-width="1" opacity="0.3"/>
+
+  <!-- Coluna 1: Perfil (Largura expandida para respirar) -->
+  <g transform="translate(10, 0)">
+    ${avatar}
+    <text x="110" y="70" fill="#EAEAEA" font-family="system-ui, sans-serif" font-size="20" font-weight="800">@${profile.login}</text>
+    <text x="110" y="90" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12" font-style="italic">Arquiteto do Vácuo</text>
+    
+    <!-- Aproximados para a esquerda para não encostar na Coluna 2 -->
+    <g transform="translate(110, 115)">
+      <text x="0" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Seguidores</text>
+      <text x="0" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.followers}</text>
+      
+      <text x="65" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Repos</text>
+      <text x="65" y="20" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">${profile.ownedRepos}</text>
+      
+      <text x="120" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Estrelas</text>
+      <text x="120" y="20" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="16" font-weight="bold" filter="url(#glow)">${profile.totalStars} ★</text>
+    </g>
+  </g>
+
+  <line x1="300" y1="50" x2="300" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
+
+  <!-- Coluna 2: Poeira Cósmica -->
+  <g transform="translate(320, 55)">
+    <text x="0" y="0" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">✦ POEIRA CÓSMICA <tspan fill="#8b949e" font-size="10" font-weight="normal">(365 Dias)</tspan></text>
+    
+    <text x="0" y="30" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Total Commits</text>
+    <text x="115" y="30" fill="#F3F4F6" font-family="monospace" font-size="14" font-weight="bold">${contributions.totalCommits}</text>
+
+    <text x="0" y="55" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Pull Requests</text>
+    <text x="115" y="55" fill="#a78bfa" font-family="monospace" font-size="14" font-weight="bold">${contributions.totalPRs}</text>
+
+    <text x="0" y="80" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Issues Abertas</text>
+    <text x="115" y="80" fill="#34d399" font-family="monospace" font-size="14" font-weight="bold">${contributions.totalIssues}</text>
+
+    <text x="0" y="105" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">Repositórios Contrib.</text>
+    <text x="115" y="105" fill="#93c5fd" font-family="monospace" font-size="14" font-weight="bold">${contributions.totalRepos}</text>
+  </g>
+
+  <line x1="530" y1="50" x2="530" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
+
+  <!-- Coluna 3: Astros e Oráculo (Largura otimizada para lado a lado) -->
+  <g transform="translate(550, 50)">
+    <text x="0" y="0" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">✦ ASTROS ÓRFÃOS</text>
+    <g transform="translate(0, 15)">
+      ${topLangs.map((l, i) => `
+        <circle cx="5" cy="${i * 16 + 4}" r="4" fill="${l.color}" />
+        <text x="15" y="${i * 16 + 8}" fill="#EAEAEA" font-family="system-ui" font-size="11">${l.name}</text>
+      `).join('')}
+      ${topLangs.length === 0 ? `<text x="0" y="15" fill="#9CA3AF" font-size="11">Nenhum astro...</text>` : ''}
+    </g>
+
+    <!-- Oráculo em 2 Linhas: Pico e Foco Lado a Lado! -->
+    <g transform="translate(0, 105)">
+      <text x="0" y="0" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">⏳ ORÁCULO</text>
+      
+      <!-- Linha 1: Dias Ativos -->
+      <text x="0" y="16" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Dias ativos</text>
+      <text x="65" y="16" fill="#10B981" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.activeDays}</text>
+      
+      <!-- Linha 2: Pico de Energia + Foco Cósmico -->
+      <text x="0" y="32" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="10">Pico Energia</text>
+      <text x="65" y="32" fill="#F3F4F6" font-family="monospace" font-size="14" font-weight="bold">${oracleStats.maxCommits}</text>
+      
+      <text x="95" y="32" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="9">Foco Cósmico:</text>
+      <text x="165" y="32" fill="#c084fc" font-family="monospace" font-size="12" font-weight="bold">${oracleStats.bestDay}</text>
+    </g>
+  </g>
+
+  <line x1="770" y1="50" x2="770" y2="180" stroke="#4B5563" stroke-width="1" opacity="0.3"/>
+
+  <!-- Coluna 4: Streak -->
+  <g transform="translate(790, 55)">
+    <!-- Streak Atual -->
+    <circle cx="5" cy="-4" r="5" fill="#10B981" />
+    <text x="18" y="0" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12">STREAK ATUAL</text>
+    <text x="18" y="28" fill="#F3F4F6" font-family="system-ui, sans-serif" font-size="28" font-weight="bold">${streak.current}</text>
+    <text x="${18 + String(streak.current).length * 16 + 5}" y="26" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">dias</text>
+
+    <!-- Maior Recorde -->
+    <!-- Diamante em ícone colado ao texto igual a bolinha do Streak Atual -->
+    <path d="M 5,59 L 9,65 L 5,71 L 1,65 Z" fill="#DBC27D"/>
+    
+    <text x="18" y="69" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="12">MAIOR RECORDE</text>
+    <text x="18" y="97" fill="#DBC27D" font-family="system-ui, sans-serif" font-size="28" font-weight="bold">${streak.longest}</text>
+    <text x="${18 + String(streak.longest).length * 16 + 5}" y="95" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="11">dias</text>
+  </g>
+
+  <!-- Rodapé -->
+  <line x1="30" y1="195" x2="910" y2="195" stroke="#4B5563" stroke-dasharray="2,2" stroke-width="1" opacity="0.3"/>
+  <rect x="370" y="202" width="200" height="20" rx="10" fill="#1E1B4B" opacity="0.8"/>
+  <text x="470" y="216" fill="#c084fc" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Acessar App Interativo Original ✦</text>
+</svg>`;
+
+  res.setHeader('Content-Type', 'image/svg+xml');
+  const fresh = req.query.fresh === 'true';
+  res.setHeader('Cache-Control', fresh ? 'no-store' : 'public, s-maxage=900, stale-while-revalidate=300');
+  return res.status(200).send(svg);
+}
